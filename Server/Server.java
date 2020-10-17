@@ -74,7 +74,7 @@ public class Server {
                     out.writeObject(isUsernameFree(username));
                 }
                 while (!isUsernameFree(username));
-                clientHandlers.put(username, this);
+                notifyUsersAndAdd();
 
                 String receivedMessage;
                 while (!(receivedMessage = (String) in.readObject()).matches("exit")) {
@@ -89,6 +89,13 @@ public class Server {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+
+        public void notifyUsersAndAdd() throws IOException {
+            for(Map.Entry<String, ClientHandler> entry: clientHandlers.entrySet()) {
+                entry.getValue().getOut().writeObject(username + " has joined the chat.");
+            }
+            clientHandlers.put(username, this);
         }
 
         public boolean isUsernameFree(String username) {
