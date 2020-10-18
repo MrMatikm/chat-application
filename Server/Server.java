@@ -83,8 +83,7 @@ public class Server {
                     }
 
                 }
-                System.out.println(username + " left the chat.");
-                clientHandlers.remove(username);
+                notifyUsersAndRemove();
                 closeClient();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -92,10 +91,19 @@ public class Server {
         }
 
         public void notifyUsersAndAdd() throws IOException {
+            System.out.println(username + " has joined the chat.");
             for(Map.Entry<String, ClientHandler> entry: clientHandlers.entrySet()) {
                 entry.getValue().getOut().writeObject(username + " has joined the chat.");
             }
             clientHandlers.put(username, this);
+        }
+
+        public void notifyUsersAndRemove() throws IOException {
+            clientHandlers.remove(username);
+            System.out.println(username + " has left the chat.");
+            for(Map.Entry<String, ClientHandler> entry: clientHandlers.entrySet()) {
+                entry.getValue().getOut().writeObject(username + " has left the chat.");
+            }
         }
 
         public boolean isUsernameFree(String username) {
