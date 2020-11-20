@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AlertBox {
+public class AlertBox1 {
     public static void display() {
         Stage stage = new Stage();
         stage.setTitle("Username taken");

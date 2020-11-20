@@ -66,13 +66,17 @@ public class ClientFX extends Application {
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        boolean isUsernameFree;
+        boolean isUsernameFree = false;
         do {
             username = LogInBox.logIn();
+            if (username.length() < 3) {
+                AlertBox2.display();
+                continue;
+            }
             out.writeObject(username);
             isUsernameFree = (boolean) in.readObject();
             if (!isUsernameFree)
-                AlertBox.display();
+                AlertBox1.display();
         }
         while (!isUsernameFree);
 
