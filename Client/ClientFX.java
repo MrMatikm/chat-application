@@ -18,8 +18,8 @@ public class ClientFX extends Application {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private String username;
-    ReceivingThread receivingThread;
-    BufferedReader bufferedReader;
+    private ReceivingThread receivingThread;
+    private BufferedReader bufferedReader;
 
     public static void main(String[] args) {
         launch(args);
@@ -36,7 +36,7 @@ public class ClientFX extends Application {
         startConnection("localHost", 777);
     }
 
-    public VBox createLayout() {
+    private VBox createLayout() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(10, 10, 10, 10));
         textArea = new TextArea();
@@ -61,7 +61,7 @@ public class ClientFX extends Application {
         return layout;
     }
 
-    public void startConnection(String ip, int port) throws IOException, ClassNotFoundException {
+    private void startConnection(String ip, int port) throws IOException, ClassNotFoundException {
         socket = new Socket(ip, port);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
@@ -85,13 +85,13 @@ public class ClientFX extends Application {
         receivingThread.start();
     }
 
-    public void sendMessage(String message) throws IOException {
+    private void sendMessage(String message) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append(username).append(": ").append(message);
         out.writeObject(sb.toString());
     }
 
-    public void receiveMessage() throws IOException, ClassNotFoundException {
+    private void receiveMessage() throws IOException, ClassNotFoundException {
         // bufferedReader is used only to make sure that "in" is not blocked when the client is being closed
         while (!bufferedReader.ready()) {
             try {
@@ -109,7 +109,7 @@ public class ClientFX extends Application {
         });
     }
 
-    public class ReceivingThread extends Thread {
+    private class ReceivingThread extends Thread {
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
@@ -121,7 +121,7 @@ public class ClientFX extends Application {
         }
     }
 
-    public void closeClient() {
+    private void closeClient() {
         if (!socket.isClosed()) {
             receivingThread.interrupt();
             try {

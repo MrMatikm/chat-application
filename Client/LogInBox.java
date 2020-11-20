@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 public class LogInBox {
     private static String userName;
     private static Stage stage;
-    public static String logIn() {
+    protected static String logIn() {
         stage = new Stage();
         stage.setTitle("Choose username");
         stage.initModality(Modality.APPLICATION_MODAL);

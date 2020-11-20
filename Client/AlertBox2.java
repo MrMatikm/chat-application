@@ -9,7 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AlertBox2 {
-    public static void display() {
+    protected static void display() {
         Stage stage = new Stage();
         stage.setTitle("Username too short");
         stage.initModality(Modality.APPLICATION_MODAL);

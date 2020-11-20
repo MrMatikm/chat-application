@@ -16,7 +16,7 @@ public class Server {
         server.startServer(777);
     }
 
-    public void startServer(int port) throws IOException {
+    private void startServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         new closingThread().start();
         try {
@@ -30,8 +30,8 @@ public class Server {
         }
     }
 
-    public class closingThread extends Thread {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private class closingThread extends Thread {
+        private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         public void run() {
             while (true) {
                 try {
@@ -50,13 +50,13 @@ public class Server {
         }
     }
 
-    public class ClientHandler extends Thread {
+    private class ClientHandler extends Thread {
         private Socket clientSocket;
         private ObjectOutputStream out;
         private ObjectInputStream in;
         private String username;
 
-        public ObjectOutputStream getOut() {
+        ObjectOutputStream getOut() {
             return out;
         }
 
@@ -90,7 +90,7 @@ public class Server {
             }
         }
 
-        public void notifyUsersAndAdd() throws IOException {
+        private void notifyUsersAndAdd() throws IOException {
             System.out.println(username + " has joined the chat.");
             for(Map.Entry<String, ClientHandler> entry: clientHandlers.entrySet()) {
                 entry.getValue().getOut().writeObject(username + " has joined the chat.");
@@ -98,7 +98,7 @@ public class Server {
             clientHandlers.put(username, this);
         }
 
-        public void notifyUsersAndRemove() throws IOException {
+        private void notifyUsersAndRemove() throws IOException {
             clientHandlers.remove(username);
             System.out.println(username + " has left the chat.");
             for(Map.Entry<String, ClientHandler> entry: clientHandlers.entrySet()) {
@@ -106,7 +106,7 @@ public class Server {
             }
         }
 
-        public boolean isUsernameFree(String username) {
+        private boolean isUsernameFree(String username) {
             for(Map.Entry<String, ClientHandler> entry: clientHandlers.entrySet()) {
                 if (username.equals(entry.getKey()))
                     return false;
@@ -114,7 +114,7 @@ public class Server {
             return true;
         }
 
-        public void closeClient() {
+        private void closeClient() {
             try {
                 in.close();
                 out.close();
